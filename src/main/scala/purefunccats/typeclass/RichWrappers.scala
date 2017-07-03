@@ -4,8 +4,12 @@ import scala.util.{ Try, Success, Failure }
 
 object RichWrappers {
 
+  trait ToEitherStr[A] {
+    def toEitherStr: Either[String, A]
+  }
+
   // Option to Either Rich Wrapper
-  class ToEitherStrOpt[A](x: Option[A]) {
+  class ToEitherStrOpt[A](x: Option[A]) extends ToEitherStr[A] {
     def toEitherStr: Either[String, A] = x match {
       case Some(y) => Right(y)
       case None    => Left("Empty Option")
@@ -16,7 +20,7 @@ object RichWrappers {
     new ToEitherStrOpt(x)
 
   // Try to Either Rich Wrapper
-  implicit class ToEitherStrTry[A](x: Try[A]) {
+  implicit class ToEitherStrTry[A](x: Try[A]) extends ToEitherStr[A] {
     def toEitherStr: Either[String, A] = x match {
       case Success(y) => Right(y)
       case Failure(e) => Left(s"Error occurred: ${e.getMessage}")
@@ -29,20 +33,13 @@ object RichWrappers {
     val success: Try[Int] = Success(1)
     val failure: Try[Int] = Failure(new RuntimeException("Test Exception"))
 
+    def mkEitherString[F[_], A](l: List[F[A]])(implicit e: F[A] => ToEitherStr[A]): String =
+      l.map(_.toEitherStr).mkString("\n")
+    
     val str =
-      (List(some, none).map(_.toEitherStr) ++
-       List(success, failure).map(_.toEitherStr)).mkString("\n")
+      mkEitherString(List(some, none)) + "\n" +
+      mkEitherString(List(success, failure))
 
     println(str)
-
-    // def mkEitherString[F[_], A](l: List[F[A]]): String =
-    //   l.map(_.toEitherStr).mkString("\n")  // Error: value toEitherStr is not a member of type parameter F[A]
-    
-    // val str =
-    //   mkEitherString(List(some, none)) + "\n" +
-    //   mkEitherString(List(success, failure))
-
-    // println(str)
   }
-
 }
