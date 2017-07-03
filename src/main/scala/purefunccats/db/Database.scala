@@ -4,7 +4,7 @@ import scala.util.{ Try, Success, Failure }
 
 trait Database {
   def getUser(id: Int): Option[User] =
-    if (id == 42) Some(User(id)) else None
+    if (id == 42 || id == 100) Some(User(id)) else None
 }
 
 object Database {

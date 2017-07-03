@@ -2,7 +2,7 @@ package purefunccats.db
 
 trait EffectfulDatabase {
   def getUser(id: Int): User =
-    if (id == 42) User(id) else null
+    if (id == 42 || id == 100) User(id) else null
 }
 
 object EffectfulDatabase {

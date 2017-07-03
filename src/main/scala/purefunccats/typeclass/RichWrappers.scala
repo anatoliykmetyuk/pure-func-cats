@@ -4,6 +4,7 @@ import scala.util.{ Try, Success, Failure }
 
 object RichWrappers {
 
+  // Option to Either Rich Wrapper
   class ToEitherStrOpt[A](x: Option[A]) {
     def toEitherStr: Either[String, A] = x match {
       case Some(y) => Right(y)
@@ -14,6 +15,7 @@ object RichWrappers {
   implicit def toEitherStrOpt[A](x: Option[A]) =
     new ToEitherStrOpt(x)
 
+  // Try to Either Rich Wrapper
   implicit class ToEitherStrTry[A](x: Try[A]) {
     def toEitherStr: Either[String, A] = x match {
       case Success(y) => Right(y)
