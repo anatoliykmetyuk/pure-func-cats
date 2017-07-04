@@ -1,4 +1,4 @@
-package purefunctions.typeclass
+package purefunccats.typeclass
 
 import scala.util.{ Try, Success, Failure }
 

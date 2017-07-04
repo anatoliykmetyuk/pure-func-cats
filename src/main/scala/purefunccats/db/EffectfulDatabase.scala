@@ -13,7 +13,7 @@ object EffectfulDatabase {
 
 object EffectfulDatabaseApp {
   def main(args: Array[String]): Unit = {
-    val connection = EffectfulDatabase.connect(false)
+    val connection = EffectfulDatabase.connect(true)
     val user = connection.getUser(10)
     println(user.id)
   }
