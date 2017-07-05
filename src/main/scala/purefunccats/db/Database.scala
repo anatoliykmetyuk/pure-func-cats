@@ -6,8 +6,8 @@ trait Database {
   def getUser(id: Int): Option[User] =
     if (id == 42 || id == 100) Some(User(id)) else None
 
-  def getPostsOf(userId: Int): List[Post] =
-    if (userId == 42) List(Post("Foo"), Post("Bar")) else Nil
+  def getPostsOf(u: User): List[Post] =
+    if (u.id == 42) List(Post("Foo"), Post("Bar")) else Nil
 }
 
 object Database {

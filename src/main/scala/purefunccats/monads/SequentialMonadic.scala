@@ -21,6 +21,6 @@ object SequentialMonadic {
 
 
   def main(args: Array[String]): Unit = {
-    println(getPostOfWithTitleFor(42, "Foo"))
+    println(getPostOfWithTitleFor(42, "Feoo"))
   }
 }

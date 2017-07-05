@@ -1,33 +1,37 @@
-package purefunccats.monads
+package purefunccats.catsintro
 
 import purefunccats.db.{ Database, User, Post }
-import purefunccats.monads.typeclass._
+import purefunccats.monads.typeclass.{ LogEither, RightLog, LeftLog }
+import purefunccats.monads.typeclass.ToLogEitherStr.Ops
 
-import ToLogEitherStr.{Ops => Ops1}
-import Monad.Ops
+import cats.syntax.flatMap._, cats.syntax.functor._
+import implicits._
 
 
-object SequentialLog {
+object Sequential {
   def connection: LogEither[String, Database] =
-    Database.connect(true).toLogEitherStr
+    for {
+      db <- Database.connect(true).toLogEitherStr
+      _  <- LogEither.tell[String](s"Connection established: $db")
+    } yield db
 
   def user(id: Int, db: Database): LogEither[String, User] =
-    db.getUser(id).toLogEitherStr
+    for {
+      u <- db.getUser(id).toLogEitherStr
+      _ <- LogEither.tell[String](s"Obtained user: $u")
+    } yield u
 
   def postWithTitleOfUser(title: String, user: User, db: Database): LogEither[String, Post] =
-    db.getPostsOf(user).find(_.title == title).toLogEitherStr
-
+    for {
+      p <- db.getPostsOf(user).find(_.title == title).toLogEitherStr
+      _ <- LogEither.tell[String](s"Post found for $user: $p")
+    } yield p
 
   def getPostOfWithTitle(userId: Int, postTitle: String): LogEither[String, Post] =
     for {
-      c <- connection // connection.flatMap { c => LogEither.tell[String](s"Connection established: $c") }
-      _ <- LogEither.tell[String](s"Connection established: $c")
-
+      c <- connection
       u <- user(userId, c)
-      _ <- LogEither.tell[String](s"Obtained user: $u")
-
       p <- postWithTitleOfUser(postTitle, u, c)
-      _ <- LogEither.tell[String](s"Post found: $p")
     } yield p
 
   def main(args: Array[String]): Unit = {

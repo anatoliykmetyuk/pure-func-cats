@@ -1,6 +1,7 @@
 val ScalaVer = "2.12.2"
 
 val Cats = "0.9.0"
+val KindProjector = "0.9.4"
 
 lazy val commonSettings = Seq(
   name    := "pure-func-cats"
@@ -24,6 +25,7 @@ lazy val commonSettings = Seq(
       "-Ywarn-dead-code",
       "-Xfuture",
       "-Ypartial-unification")
+, addCompilerPlugin("org.spire-math" %% "kind-projector" % KindProjector)
 )
 
 lazy val root = (project in file("."))

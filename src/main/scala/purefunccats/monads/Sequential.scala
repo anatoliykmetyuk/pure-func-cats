@@ -5,17 +5,19 @@ import purefunccats.typeclass.ToEitherStr
 import ToEitherStr.Ops
 
 object Sequential {
-  def connection: Either[String, Database] =
+  type EitherStr[A] = Either[String, A]
+
+  def connection: EitherStr[Database] =
     Database.connect(true).toEitherStr
 
-  def user(id: Int, db: Database): Either[String, User] =
+  def user(id: Int, db: Database): EitherStr[User] =
     db.getUser(id).toEitherStr
 
-  def postWithTitleOfUser(title: String, user: User, db: Database): Either[String, Post] =
-    db.getPostsOf(user.id).find(_.title == title).toEitherStr
+  def postWithTitleOfUser(title: String, user: User, db: Database): EitherStr[Post] =
+    db.getPostsOf(user).find(_.title == title).toEitherStr
 
 
-  def getPostOfWithTitle(userId: Int, postTitle: String): Either[String, Post] =
+  def getPostOfWithTitle(userId: Int, postTitle: String): EitherStr[Post] =
     // Get connection
     connection match {
       case Right(c) =>
