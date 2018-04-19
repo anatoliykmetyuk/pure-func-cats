@@ -9,17 +9,24 @@ object RichWrappers {
   }
 
   // Option to Either Rich Wrapper
-  implicit class ToEitherStrOpt[A](x: Option[A]) extends ToEitherStr[A] {
+  class ToEitherStrOpt[A](x: Option[A]) extends ToEitherStr[A] {
     def toEitherStr: Either[String, A] = x match {
       case Some(y) => Right(y)
       case None    => Left("Empty Option")
     }
   }
 
-  // implicit def toEitherStrOpt[A](x: Option[A]) =
-  //   new ToEitherStrOpt(x)
+  implicit def toEitherStrOpt[A](x: Option[A]) =
+    new ToEitherStrOpt(x)
 
-  // Try to Either Rich Wrapper
+  /**
+    `implicit class` technique produces both the class and the
+    conversion from its sole constructor argument type to this
+    class.
+
+    Essentially the code below is identical to the `class` and the
+    `implicit def` above, just for `Try`.
+   */
   implicit class ToEitherStrTry[A](x: Try[A]) extends ToEitherStr[A] {
     def toEitherStr: Either[String, A] = x match {
       case Success(y) => Right(y)

@@ -6,6 +6,12 @@ import purefunccats.monads.typeclass.{ LogEither, RightLog, LeftLog }
 
 
 object implicits {
+
+  /**
+    Kind Projector plugin is used below to partially apply a type.
+    This avoids the hassle with the type lambda we saw in
+    `purefunccats.monads.typeclass.Monad`.
+  */
   implicit def logEitherMonad[L]: Monad[LogEither[L, ?]] = new Monad[LogEither[L, ?]] {
     def flatMap[A, B](fa: LogEither[L, A])(f: A => LogEither[L, B]): LogEither[L, B] =
       fa match {

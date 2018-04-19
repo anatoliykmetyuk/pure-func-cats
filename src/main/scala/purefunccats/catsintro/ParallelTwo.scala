@@ -9,6 +9,13 @@ import implicits._
 
 import Sequential.{ connection, user, postWithTitleOfUser }
 
+/**
+  An adaptation of SequentialTwo example. It shows how
+  the problem we encountered there has a solution
+  in the form of the Cartesian type class from Cats.
+  With Cartesian, we are able to execute two chunks of
+  code independently and then merge their results into one structure.
+ */
 object ParallelTwo {
   def lookupPostForUser(uid: Int, postTitle: String, c: Database): LogEither[String, Post] =
     for {

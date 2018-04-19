@@ -2,6 +2,7 @@ package purefunccats.monads.typeclass
 
 import scala.util.{ Try, Success, Failure }
 
+
 trait ToLogEitherStr[F[_]] {
   def toLogEitherStr[A](x: F[A]): LogEither[String, A]
 }

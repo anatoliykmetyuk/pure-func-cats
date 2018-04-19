@@ -7,6 +7,15 @@ import ToLogEitherStr.{Ops => Ops1}
 import Monad.Ops
 
 
+/**
+ * This example shows how more side effects can be abstracted
+ * into the effect types. In the Sequential example, we
+ * only had errors abstracted - here, we have the logging
+ * functionality added too.
+ *    
+ * See purefunccats.monads.typeclass package for the
+ * classes involved.
+ */
 object SequentialLog {
   def connection: LogEither[String, Database] =
     Database.connect(true).toLogEitherStr
@@ -17,7 +26,11 @@ object SequentialLog {
   def postWithTitleOfUser(title: String, user: User, db: Database): LogEither[String, Post] =
     db.getPostsOf(user).find(_.title == title).toLogEitherStr
 
-
+ /**
+  * The code below is very similar to the imperative, side effecting
+  * code. However, whatever the statements of this monadic flow
+  * do, gets written to the effect type and does not side effect.
+  */
   def getPostOfWithTitle(userId: Int, postTitle: String): LogEither[String, Post] =
     for {
       c <- connection // connection.flatMap { c => LogEither.tell[String](s"Connection established: $c") }

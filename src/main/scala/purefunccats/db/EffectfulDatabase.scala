@@ -1,5 +1,8 @@
 package purefunccats.db
 
+/**
+ * A side-effecting database. Beware exceptions!
+ */
 trait EffectfulDatabase {
   def getUser(id: Int): User =
     if (id == 42 || id == 100) User(id) else null

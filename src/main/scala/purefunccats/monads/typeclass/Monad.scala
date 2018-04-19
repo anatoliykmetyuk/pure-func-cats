@@ -1,5 +1,6 @@
 package purefunccats.monads.typeclass
 
+
 trait Monad[F[_]] {
   def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
   def pure[A](a: A): F[A]
@@ -19,6 +20,11 @@ object Monad {
       Monad[F].map(fa)(f)
   }
 
+  /**
+    The "type lambda" trick is used to partially apply a type with two type parameters,
+    so that it becomes a type with only one type parameter - what Monad expects
+    as a type argument.
+  */
   implicit def monadLogEither[L]: Monad[({type f[a] = LogEither[L, a]})#f] = new Monad[({type f[a] = LogEither[L, a]})#f] {
     def flatMap[A, B](fa: LogEither[L, A])(f: A => LogEither[L, B]): LogEither[L, B] =
       fa match {

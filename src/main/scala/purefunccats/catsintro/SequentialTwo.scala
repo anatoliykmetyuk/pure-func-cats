@@ -9,6 +9,15 @@ import implicits._
 
 import Sequential.{ connection, user, postWithTitleOfUser }
 
+/**
+  Notice how in this example,
+  the program executes till the first error.
+  Even if the chunk of code after the error
+  does not depend on the chunk of code the error happened in.
+  The problem here is that not all the errors are written into the
+  log since the program does not try to execute past the first
+  error.
+*/
 object SequentialTwo {
   def lookupPostForUser(uid: Int, postTitle: String, c: Database): LogEither[String, Post] =
     for {
@@ -22,7 +31,7 @@ object SequentialTwo {
   ): LogEither[String, (Post, Post)] =
     for {
       c <- connection
-      p1 <- lookupPostForUser(userId1, postTitle1, c)
+      p1 <- lookupPostForUser(userId1, postTitle1, c)  // lookupPostForUser(userId1, postTitle1, c).flatMap { _ => lookupPostForUser(userId2, postTitle2, c) }
       p2 <- lookupPostForUser(userId2, postTitle2, c)
     } yield (p1, p2)
 
