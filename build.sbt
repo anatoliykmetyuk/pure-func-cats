@@ -20,7 +20,7 @@ lazy val commonSettings = Seq(
       "-language:experimental.macros",
       "-unchecked",
       // "-Xfatal-warnings",
-      "-Xlint",
+      // "-Xlint",
       // "-Yinline-warnings",
       "-Ywarn-dead-code",
       "-Xfuture",
